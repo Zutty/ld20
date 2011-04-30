@@ -22,7 +22,8 @@ package uk.co.zutty.ld20
 			spritemap.add("right", [3]);
 			graphic = spritemap;
 			spritemap.play("right");
-			setHitbox(32, 48);
+			setHitbox(30, 30, -1, -17);
+			type = "solid";
 		}
 	}
 }

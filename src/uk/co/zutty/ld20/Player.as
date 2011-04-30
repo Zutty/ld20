@@ -24,7 +24,8 @@ package uk.co.zutty.ld20
 			spritemap.add("right", [3]);
 			graphic = spritemap;
 			spritemap.play("right");
-			setHitbox(32, 48);
+			setHitbox(30, 30, -1, -17);
+			//type = "solid";
 		}
 		
 		override public function update():void {
@@ -45,7 +46,7 @@ package uk.co.zutty.ld20
 		}
 		
 		private function move(dx:Number, dy:Number):void {
-			if(!collide("walls", x+dx, y+dy)) {
+			if(!collide("solid", x+dx, y+dy)) {
 				x += dx;
 				y += dy;
 			}

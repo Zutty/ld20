@@ -11,14 +11,14 @@ package uk.co.zutty.ld20.ogmo
 	public class OgmoLevel {
 		
 		private var data:XML;
-		private var tiles:Class;
+		private var tileMaps:Object;
 		private var tileWidth:Number;
 		private var tileHeight:Number;
 		
-		public function OgmoLevel(raw:Class, tiles:Class, tileWidth:Number, tileHeight:Number) {
+		public function OgmoLevel(raw:Class, tileMaps:Object, tileWidth:Number, tileHeight:Number) {
 			this.tileWidth = tileWidth;
 			this.tileHeight = tileHeight;
-			this.tiles = tiles;
+			this.tileMaps = tileMaps;
 			var bytes:ByteArray = new raw();
 			data = new XML(bytes.readUTFBytes(bytes.length));
 			trace(data);
@@ -34,9 +34,8 @@ package uk.co.zutty.ld20.ogmo
 
 		public function getLayer(name:String, solid:Boolean = false):Entity {
 			var layer:Entity = new Entity();
-			layer.type = name;
 			
-			var tilemap:Tilemap = new Tilemap(tiles, data.width, data.height, tileWidth, tileHeight);
+			var tilemap:Tilemap = new Tilemap(tileMaps[name] as Class, data.width, data.height, tileWidth, tileHeight);
 			var grid:Grid = new Grid(data.width, data.height, tileWidth, tileHeight);
 
 			for each(var tile:XML in data[name][0].tile) {
@@ -47,6 +46,7 @@ package uk.co.zutty.ld20.ogmo
 
 			layer.graphic = tilemap;
 			if(solid) {
+				layer.type = "solid";
 				layer.mask = grid;
 			}
 			

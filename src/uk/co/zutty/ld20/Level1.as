@@ -16,9 +16,12 @@ package uk.co.zutty.ld20
 
 		[Embed(source = '/data/tiles.png')]
 		private const TILES_IMAGE:Class;
-		
+
+		[Embed(source = '/data/walls.png')]
+		private const WALLS_IMAGE:Class;
+
 		public function Level1() {
-			super(LEVEL1_OEL, TILES_IMAGE, 32, 32);
+			super(LEVEL1_OEL, {floor: TILES_IMAGE, walls:WALLS_IMAGE}, 32, 32);
 		}
 	}
 }
