@@ -17,7 +17,8 @@
 		<objects name="objects" gridSize="32"/>   
 	</layers>
 	<tilesets> 
-		<tileset name="main" image="tiles.png" tileWidth="32" tileHeight="32"/>
+		<tileset name="floor" image="tiles.png" tileWidth="32" tileHeight="32"/>
+		<tileset name="walls" image="walls.png" tileWidth="32" tileHeight="32"/>
 	</tilesets>   
 	<objects>
 		<object name="spawn" image="placeholders/spawn.png" width="32" height="48" limit="1"/>

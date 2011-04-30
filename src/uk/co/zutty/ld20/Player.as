@@ -1,6 +1,7 @@
 package uk.co.zutty.ld20
 {
 	import net.flashpunk.Entity;
+	import net.flashpunk.FP;
 	import net.flashpunk.graphics.Image;
 	import net.flashpunk.graphics.Spritemap;
 	import net.flashpunk.utils.Input;
@@ -29,25 +30,25 @@ package uk.co.zutty.ld20
 		override public function update():void {
 			if(Input.check(Key.LEFT)) {
 				spritemap.play("left");
-				moveBy(-SPEED, 0, "walls");
+				move(-SPEED, 0);
 			} else if(Input.check(Key.RIGHT)) {
 				spritemap.play("right");
-				moveBy(SPEED, 0, "walls");
+				move(SPEED, 0);
 			}
 			if(Input.check(Key.UP)) {
 				spritemap.play("up");
-				moveBy(0, -SPEED, "walls");
+				move(0, -SPEED);
 			} else if(Input.check(Key.DOWN)) {
 				spritemap.play("down");
-				moveBy(0, SPEED, "walls");
+				move(0, SPEED);
 			}
 		}
 		
-		/*private function moveBy(dx:Number, dy:Number):void {
+		private function move(dx:Number, dy:Number):void {
 			if(!collide("walls", x+dx, y+dy)) {
 				x += dx;
 				y += dy;
 			}
-		}*/
+		}
 	}
 }

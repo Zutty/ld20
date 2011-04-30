@@ -24,6 +24,14 @@ package uk.co.zutty.ld20.ogmo
 			trace(data);
 		}
 		
+		public function get width():Number {
+			return data.width;
+		}
+		
+		public function get height():Number {
+			return data.height;
+		}
+
 		public function getLayer(name:String, solid:Boolean = false):Entity {
 			var layer:Entity = new Entity();
 			layer.type = name;
