@@ -7,6 +7,7 @@ package uk.co.zutty.ld20.ogmo
 	import net.flashpunk.masks.Grid;
 	
 	import uk.co.zutty.ld20.Vector2D;
+	import uk.co.zutty.ld20.Waypoint;
 
 	public class OgmoLevel {
 		
@@ -53,10 +54,19 @@ package uk.co.zutty.ld20.ogmo
 			return layer;
 		}
 		
-		public function getObjectPositions(layerName:String, objName:String):Vector.<Vector2D> {
-			var ret:Vector.<Vector2D> = new Vector.<Vector2D>();
+		public function getObjectWaypoints(layerName:String, objName:String):Vector.<Waypoint> {
+			var ret:Vector.<Waypoint> = new Vector.<Waypoint>();
 			for each(var obj:XML in data[layerName][0][objName]) {
-				ret.push(new Vector2D(obj.@x, obj.@y));
+				var first:Waypoint = new Waypoint(obj.@x, obj.@y);
+				var prev:Waypoint = first;
+				
+				for each(var node:XML in obj.node) {
+					var wp:Waypoint = new Waypoint(node.@x, node.@y);
+					prev.next = wp;
+					prev = wp;
+				}
+				prev.next = first;
+				ret.push(first);
 			}
 			return ret;
 		}

@@ -9,7 +9,7 @@ package uk.co.zutty.ld20
 			super(x, y, graphic, mask);
 		}
 		
-		public function goTo(pos:Vector2D):void {
+		public function setPos(pos:Vector2D):void {
 			x = pos.x;
 			y = pos.y;
 		}

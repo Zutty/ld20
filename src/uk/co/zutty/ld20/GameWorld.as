@@ -15,12 +15,13 @@ package uk.co.zutty.ld20
 			
 			var spawnPoint:Vector2D = level.getObjectPosition("objects", "spawn");
 			player = new Player();
-			player.goTo(spawnPoint);
+			player.setPos(spawnPoint);
 			add(player);
 			
-			for each(var robotSpawn:Vector2D in level.getObjectPositions("objects", "robot")) {
+			for each(var robotSpawn:Waypoint in level.getObjectWaypoints("objects", "robot")) {
 				var robot:Robot = new Robot();
-				robot.goTo(robotSpawn);
+				robot.setPos(robotSpawn);
+				robot.goTo(robotSpawn.next);
 				add(robot);
 			}
 		}
