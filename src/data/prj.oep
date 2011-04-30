@@ -1,0 +1,36 @@
+<project>
+	<name>LD20 Project</name>
+	<settings>  
+		<defaultWidth>640</defaultWidth>  
+		<defaultHeight>480</defaultHeight>  
+		<minWidth>640</minWidth>  
+		<minHeight>480</minHeight>  
+		<maxWidth>4800</maxWidth>  
+		<maxHeight>4800</maxHeight>  
+	</settings>
+	<values>
+		<string name="title" default="new level" maxChars="30" />  
+	</values> 
+	<layers>  
+		<tiles name="floor" gridSize="32"/>   
+		<tiles name="walls" gridSize="32"/>
+		<objects name="objects" gridSize="32"/>   
+	</layers>
+	<tilesets> 
+		<tileset name="main" image="tiles.png" tileWidth="32" tileHeight="32"/>
+	</tilesets>   
+	<objects>
+		<object name="spawn" image="placeholders/spawn.png" width="32" height="48" limit="1"/>
+		<object name="robot" image="placeholders/robot_spawn.png" width="32" height="48">
+			<values>
+				<integer name="robotid"/>
+			</values>
+		</object>
+		<object name="waypoint" image="placeholders/robot_waypoint.png" width="32" height="48">
+			<values>
+				<integer name="robotid"/>
+			</values>
+		</object>
+		<object name="cat" image="placeholders/cat.png" width="32" height="32"/>
+	</objects>
+</project>
