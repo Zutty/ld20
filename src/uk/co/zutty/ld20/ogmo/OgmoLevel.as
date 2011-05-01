@@ -34,26 +34,44 @@ package uk.co.zutty.ld20.ogmo
 		}
 
 		public function getLayer(name:String, solid:Boolean = false):Entity {
-			var layer:Entity = new Entity();
-			
-			var tilemap:Tilemap = new Tilemap(tileMaps[name] as Class, data.width, data.height, tileWidth, tileHeight);
-			var grid:Grid = new Grid(data.width, data.height, tileWidth, tileHeight);
+			return loadLayer(name, true, solid);
+		}
+		
+		public function getMask(name:String):Entity {
+			return loadLayer(name, false, true);
+		}
 
-			for each(var tile:XML in data[name][0].tile) {
-				var idx:uint = tilemap.getIndex(tile.@tx / tileWidth, tile.@ty / tileHeight);
-				tilemap.setTile(tile.@x / tileWidth, tile.@y / tileHeight, idx);
-				grid.setTile(tile.@x / tileWidth, tile.@y / tileHeight);
+		private function loadLayer(name:String, showTiles:Boolean, solid:Boolean):Entity {
+			var layer:Entity = new Entity();
+
+			if(showTiles) {
+				var tilemap:Tilemap = new Tilemap(tileMaps[name] as Class, data.width, data.height, tileWidth, tileHeight);
+			}
+			if(solid) {
+				var grid:Grid = new Grid(data.width, data.height, tileWidth, tileHeight);
 			}
 
-			layer.graphic = tilemap;
+			for each(var tile:XML in data[name][0].tile) {
+				if(showTiles) {
+					var idx:uint = tilemap.getIndex(tile.@tx / tileWidth, tile.@ty / tileHeight);
+					tilemap.setTile(tile.@x / tileWidth, tile.@y / tileHeight, idx);
+				}
+				if(solid) {
+					grid.setTile(tile.@x / tileWidth, tile.@y / tileHeight);
+				}
+			}
+
+			if(showTiles) {
+				layer.graphic = tilemap;
+			}
 			if(solid) {
-				layer.type = "solid";
+				layer.type = (showTiles) ? "solid" : name;
 				layer.mask = grid;
 			}
 			
 			return layer;
 		}
-		
+
 		public function getObjectWaypoints(layerName:String, objName:String):Vector.<Waypoint> {
 			var ret:Vector.<Waypoint> = new Vector.<Waypoint>();
 			for each(var obj:XML in data[layerName][0][objName]) {

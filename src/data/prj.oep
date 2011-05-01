@@ -14,11 +14,15 @@
 	<layers>  
 		<tiles name="floor" gridSize="32"/>   
 		<tiles name="walls" gridSize="32"/>
+		<tiles name="robot_area" gridSize="32"/>
+		<tiles name="exit" gridSize="32"/>
 		<objects name="objects" gridSize="32"/>   
 	</layers>
 	<tilesets> 
 		<tileset name="floor" image="tiles.png" tileWidth="32" tileHeight="32"/>
 		<tileset name="walls" image="walls.png" tileWidth="32" tileHeight="32"/>
+		<tileset name="robot_area" image="placeholders/robot_area.png" tileWidth="32" tileHeight="32"/>
+		<tileset name="exit" image="placeholders/exit.png" tileWidth="32" tileHeight="32"/>
 	</tilesets>   
 	<objects>
 		<object name="spawn" image="placeholders/spawn.png" width="32" height="48" limit="1"/>
@@ -30,6 +34,5 @@
 		</object>
 		<object name="crazyoldman" image="placeholders/oldman.png" width="32" height="48"/>
 		<object name="cat" image="placeholders/cat.png" width="32" height="32"/>
-		<object name="exit" image="placeholders/exit.png" width="32" height="32"/>
 	</objects>
 </project>

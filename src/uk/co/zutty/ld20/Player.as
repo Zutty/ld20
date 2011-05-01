@@ -7,7 +7,7 @@ package uk.co.zutty.ld20
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
 
-	public class Player extends LD20Entity {
+	public class Player extends Character {
 		
 		private const SPEED:Number = 3;
 		
@@ -15,6 +15,7 @@ package uk.co.zutty.ld20
 		private const MAN_IMAGE:Class;
 		
 		private var spritemap:Spritemap;
+		private var _kitty:Boolean;
 
 		public function Player() {
 			spritemap = new Spritemap(MAN_IMAGE, 32, 48);
@@ -25,7 +26,16 @@ package uk.co.zutty.ld20
 			graphic = spritemap;
 			spritemap.play("right");
 			setHitbox(30, 30, -1, -17);
-			//type = "solid";
+			type = "solid";
+			_kitty = true;
+		}
+		
+		public function get kitty():Boolean {
+			return _kitty;
+		}
+		
+		public function set kitty(k:Boolean):void {
+			_kitty = k;
 		}
 		
 		override public function update():void {
@@ -42,13 +52,6 @@ package uk.co.zutty.ld20
 			} else if(Input.check(Key.DOWN)) {
 				spritemap.play("down");
 				move(0, SPEED);
-			}
-		}
-		
-		private function move(dx:Number, dy:Number):void {
-			if(!collide("solid", x+dx, y+dy)) {
-				x += dx;
-				y += dy;
 			}
 		}
 	}

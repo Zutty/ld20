@@ -12,7 +12,7 @@ package uk.co.zutty.ld20
 		public function distanceTo(px:Number, py:Number):Number {
 			var dx:Number = px - x;
 			var dy:Number = py - y;
-			return Math.sqrt(dx*dx + dy+dy);
+			return Math.sqrt(dx*dx + dy*dy);
 		}
 	}
 }
