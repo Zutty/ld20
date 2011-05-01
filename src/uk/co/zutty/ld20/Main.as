@@ -8,7 +8,7 @@ package uk.co.zutty.ld20
 		
 		public function Main() {
 			super(640, 480, 60, true);
-			FP.world = new GameWorld();
+			FP.world = new TitleScreen();
 		}
 	} 
 } 

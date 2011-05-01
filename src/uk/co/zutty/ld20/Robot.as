@@ -9,7 +9,8 @@ package uk.co.zutty.ld20
 	public class Robot extends Character {
 
 		private const SPEED:Number = 1.5;
-		private const WEAPON_RANGE:Number = 90;
+		private const TARGET_RANGE:Number = 120;
+		private const FIRE_COOLDOWN:uint = 30;
 		
 		private const STATE_NORMAL:uint = 1;
 		private const STATE_HAPPY:uint = 2;
@@ -23,6 +24,7 @@ package uk.co.zutty.ld20
 		private var direction:Vector2D;
 		private var targetting:Boolean;
 		private var state:uint;
+		private var fireTimer:uint;
 
 		public function Robot() {
 			super();
@@ -78,18 +80,21 @@ package uk.co.zutty.ld20
 		override public function update():void {
 			super.update();
 			var shouldMove:Boolean = true;
+			fireTimer++;
 			
-			var t:LD20Entity = getTarget();
+			var t:Character = getTarget();
 			if(t) {
 				targetting = true;
 				var tdir:Vector2D = Vector2D.unitVector(x, y, t.x, t.y);
 				
-				if(t is Player && (t as Player).kitty) {
+				if((t is Player && (t as Player).kitty) || t is Cat) {
 					direction = tdir; 	
 					state = STATE_HAPPY;
 				} else {
 					shouldMove = false;
 					state = STATE_ANGRY;
+					// Fire if ready
+					fire(t);
 				}
 
 				face(tdir);
@@ -114,14 +119,30 @@ package uk.co.zutty.ld20
 			}
 		}
 		
-		private function getTarget():LD20Entity {
+		private function fire(target:Character):void {
+			if(fireTimer < FIRE_COOLDOWN) {
+				return;
+			}
+			
+			fireTimer = 0;
 			if(FP.world is GameWorld) {
 				var w:GameWorld = (FP.world) as GameWorld;
-				var player:Player = w.player;
-				var dx:Number = player.x - x;
-				var dy:Number = player.y - y;
-				var inRange:Boolean = Math.sqrt(dx*dx + dy*dy) <= WEAPON_RANGE; 
-				return inRange ? player : null;
+				var dir:Vector2D = Vector2D.unitVector(x + 16, y + 24, target.x + 16, target.y + 32);
+				w.add(new Bullet(x + 16, y + 16, dir));
+			}			
+		}
+		
+		private function getTarget():Character {
+			if(FP.world is GameWorld) {
+				var w:GameWorld = (FP.world) as GameWorld;
+				for each(var target:Character in w.targetable) {
+					var dx:Number = target.x - x;
+					var dy:Number = target.y - y;
+
+					if(Math.sqrt(dx*dx + dy*dy) <= TARGET_RANGE) {
+						return target;
+					}
+				}
 			}
 			return null;
 		}
