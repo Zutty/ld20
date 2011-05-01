@@ -26,6 +26,8 @@ package uk.co.zutty.ld20
 				robot.goTo(robotSpawn.next);
 				add(robot);
 			}
+
+			add(level.getLayer("ceiling"));
 		}
 		
 		public function get player():Player {

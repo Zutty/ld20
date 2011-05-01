@@ -10,12 +10,15 @@ package uk.co.zutty.ld20
 	public class Player extends Character {
 		
 		private const SPEED:Number = 3;
+		private const MAX_HEALTH:Number = 5;
+		private const HEALTH_RECHARGE:Number = 0.01;
 		
 		[Embed(source = '/data/man.png')]
 		private const MAN_IMAGE:Class;
 		
 		private var spritemap:Spritemap;
 		private var _kitty:Boolean;
+		private var _health:Number;
 
 		public function Player() {
 			spritemap = new Spritemap(MAN_IMAGE, 32, 48);
@@ -28,8 +31,13 @@ package uk.co.zutty.ld20
 			setHitbox(30, 30, -1, -17);
 			type = "solid";
 			_kitty = true;
+			_health = MAX_HEALTH;
 		}
 		
+		public function get health():Number {
+			return _health;
+		}
+
 		public function get kitty():Boolean {
 			return _kitty;
 		}
@@ -39,6 +47,10 @@ package uk.co.zutty.ld20
 		}
 		
 		override public function update():void {
+			super.update();
+			
+			_health += HEALTH_RECHARGE;
+			
 			if(Input.check(Key.LEFT)) {
 				spritemap.play("left");
 				move(-SPEED, 0);
