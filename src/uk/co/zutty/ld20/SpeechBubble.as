@@ -28,7 +28,7 @@ package uk.co.zutty.ld20
 		}
 		
 		public function reset(str:String, duration:uint = 80, color:uint = 0xFFFFFF):void {
-			_text = new Text(str);
+			_text = new Text((str != null) ? str : "");
 			_text.color = color;
 			_text.alpha = 0;
 			_text.field.filters = [new GlowFilter(0x000000, 1, TEXT_OUTLINE, TEXT_OUTLINE)];
