@@ -7,12 +7,12 @@ package uk.co.zutty.ld20
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
 	
-	public class TitleScreen extends World {
-		public function TitleScreen() {
+	public class WinScreen extends World {
+		public function WinScreen() {
 			super();
 			
 			var e:Entity = new Entity();
-			var et:Text = new Text("DEATHBOT LOVE");
+			var et:Text = new Text("You escaped!");
 			et.size = 48;
 			e.graphic = et;
 			e.width = et.width;
@@ -23,7 +23,7 @@ package uk.co.zutty.ld20
 			
 			// Continue text
 			var f:Entity = new Entity();
-			var ft:Text = new Text("Press X to begin");
+			var ft:Text = new Text("Press X to continue");
 			ft.size = 20;
 			f.graphic = ft;
 			f.width = ft.width;
@@ -35,7 +35,7 @@ package uk.co.zutty.ld20
 		
 		override public function update():void {
 			if(Input.pressed(Key.X)) {
-				FP.world = new GameWorld();
+				FP.world = new TitleScreen();
 			}
 		}
 	}

@@ -6,11 +6,19 @@ package uk.co.zutty.ld20
 	
 	public class GameWorld extends World {
 		
+		private const END_TIME:uint = 130;
+		private const RESPAWN_TIME:uint = 90;
+		
 		private var _player:Player;
 		private var spawnPoint:Vector2D;
 		private var _targetable:Vector.<Character>;
 		private var level:Level1;
 		private var _hurtInd:HurtIndicator;
+		private var _scrFade:ScreenFade;
+		private var respawnTick:uint;
+		private var levelEnded:Boolean;
+		private var levelEndTick:uint;
+		private var levelStarted:Boolean;
 		
 		public function GameWorld() {
 			level = new Level1();
@@ -27,6 +35,11 @@ package uk.co.zutty.ld20
 			add(_player);
 			_targetable.push(_player);
 			
+			var comSpawn:Vector2D = level.getObjectPosition("objects", "crazyoldman");
+			var crazyOldMan:CrazyOldMan = new CrazyOldMan();
+			crazyOldMan.setPos(comSpawn);
+			add(crazyOldMan);
+
 			var catSpawn:Vector2D = level.getObjectPosition("objects", "cat");
 			var cat:Cat = new Cat();
 			cat.setPos(catSpawn);
@@ -44,6 +57,11 @@ package uk.co.zutty.ld20
 			
 			_hurtInd = new HurtIndicator();
 			add(_hurtInd);
+			_scrFade = new ScreenFade();
+			add(_scrFade);
+			_scrFade.fadeIn();
+			levelStarted = true;
+			levelEnded = false;
 		}
 		
 		public function get hurtIndicator():HurtIndicator {
@@ -58,18 +76,42 @@ package uk.co.zutty.ld20
 			return _player;
 		}
 		
+		public function triggerRespawn():void {
+			respawnTick = 0;
+		}
+
 		public function respawnPlayer():void {
 			_player.x = spawnPoint.x; 
 			_player.y = spawnPoint.y;
 			player.respawn();
 		}
-		
+
 		public function endLevel():void {
-			FP.world = new TitleScreen();
+			if(!levelEnded) {
+				_scrFade.fadeOut();
+				levelEndTick = 0;
+			}
+			levelEnded = true;
 		}
 		
 		override public function update():void {
 			super.update();
+			
+			if(levelEnded && ++levelEndTick > END_TIME) {
+				FP.world = new WinScreen();
+			}
+			
+			if(levelStarted) {
+				_player.sayAny(["Ow, my head", "Where am I?", "Not again!"]);
+				levelStarted = false;
+			}
+			
+			if(_player.dead) {
+				respawnTick++;
+				if(respawnTick >= RESPAWN_TIME) {
+					respawnPlayer();
+				}
+			}
 			
 			// Move the camera
 			if(!_player.dead) {

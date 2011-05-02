@@ -6,6 +6,7 @@
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
+	
 	import net.flashpunk.FP;
 	import net.flashpunk.Graphic;
 	
@@ -106,6 +107,8 @@
 		 * Height of the text image.
 		 */
 		override public function get height():uint { return _height; }
+
+		public function get field():TextField { return _field; }
 		
 		// Text information.
 		/** @private */ private var _field:TextField = new TextField;

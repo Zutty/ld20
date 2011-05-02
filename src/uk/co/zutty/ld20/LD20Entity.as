@@ -1,6 +1,7 @@
 package uk.co.zutty.ld20
 {
 	import net.flashpunk.Entity;
+	import net.flashpunk.FP;
 	import net.flashpunk.Graphic;
 	import net.flashpunk.Mask;
 	
@@ -10,6 +11,14 @@ package uk.co.zutty.ld20
 			super(x, y, graphic, mask);
 		}
 		
+		protected function get gameworld():GameWorld {
+			return (FP.world is GameWorld) ? FP.world as GameWorld : null;
+		}
+
+		public function destroy():void {
+			FP.world.remove(this);
+		}
+
 		public function setPos(pos:Vector2D):void {
 			x = pos.x;
 			y = pos.y;

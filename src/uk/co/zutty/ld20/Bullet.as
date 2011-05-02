@@ -44,9 +44,5 @@ package uk.co.zutty.ld20
 			x += direction.x * SPEED;
 			y += direction.y * SPEED;
 		}
-		
-		public function destroy():void {
-			FP.world.remove(this);
-		}
 	}
 }

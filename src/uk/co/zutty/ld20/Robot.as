@@ -7,6 +7,8 @@ package uk.co.zutty.ld20
 	import net.flashpunk.graphics.Spritemap;
 	
 	public class Robot extends Character {
+		
+		private const MELEE_DAMAGE:Number = 5;
 
 		private const SPEED:Number = 1.5;
 		private const TARGET_RANGE:Number = 120;
@@ -22,7 +24,7 @@ package uk.co.zutty.ld20
 		private var spritemap:Spritemap;
 		private var waypoint:Waypoint;
 		private var direction:Vector2D;
-		private var targetting:Boolean;
+		private var target:Character;
 		private var state:uint;
 		private var fireTimer:uint;
 
@@ -51,7 +53,7 @@ package uk.co.zutty.ld20
 			spritemap.play("right");
 			setHitbox(30, 30, -1, -17);
 			type = "solid";
-			targetting = false;
+			target = null;
 		}
 		
 		public function goTo(waypoint:Waypoint):void {
@@ -84,25 +86,31 @@ package uk.co.zutty.ld20
 			
 			var t:Character = getTarget();
 			if(t) {
-				targetting = true;
 				var tdir:Vector2D = Vector2D.unitVector(x, y, t.x, t.y);
 				
 				if((t is Player && (t as Player).kitty) || t is Cat) {
 					direction = tdir; 	
 					state = STATE_HAPPY;
+					if(t != target) {
+						sayAny(["Kitty!", "Awww", "So cute", "Hugs", "Fuzzy", "Meow"]);
+					}
 				} else {
+					if(t != target) {
+						sayAny(["Lets be friends", "I love you", "Hello", "I'll help you"]);
+					}
 					shouldMove = false;
 					state = STATE_ANGRY;
 					// Fire if ready
 					fire(t);
 				}
 
+				target = t;
 				face(tdir);
 			} else {
 				state = STATE_NORMAL;
-				if(targetting) {
+				if(target != null) {
 					goTo(waypoint);
-					targetting = false;
+					target = null;
 				}
 			}
 			
@@ -125,17 +133,13 @@ package uk.co.zutty.ld20
 			}
 			
 			fireTimer = 0;
-			if(FP.world is GameWorld) {
-				var w:GameWorld = (FP.world) as GameWorld;
-				var dir:Vector2D = Vector2D.unitVector(x + 16, y + 24, target.x + 16, target.y + 32);
-				w.add(new Bullet(x + 16, y + 16, dir));
-			}			
+			var dir:Vector2D = Vector2D.unitVector(x + 16, y + 24, target.x + 16, target.y + 32);
+			FP.world.add(new Bullet(x + 16, y + 16, dir));
 		}
 		
 		private function getTarget():Character {
-			if(FP.world is GameWorld) {
-				var w:GameWorld = (FP.world) as GameWorld;
-				for each(var target:Character in w.targetable) {
+			if(gameworld) {
+				for each(var target:Character in gameworld.targetable) {
 					var dx:Number = target.x - x;
 					var dy:Number = target.y - y;
 
@@ -151,9 +155,15 @@ package uk.co.zutty.ld20
 		 * Robots can only be in the robot area, defined by a mask with 
 		 * collision type "robot_area".
 		 */
-		override protected function move(dx:Number, dy:Number):void {
+		override protected function move(dx:Number, dy:Number, cb:Function = null):void {
 			if(collide("robot_area", x+dx, y+dy)) {
-				super.move(dx, dy);
+				super.move(dx, dy, meleePlayer);
+			}
+		}
+		
+		private function meleePlayer(e:Entity):void {
+			if(e is Player) {
+				(e as Player).hurt(MELEE_DAMAGE);
 			}
 		}
 	}
